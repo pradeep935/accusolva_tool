@@ -287,19 +287,24 @@
                       Expected Metrices & Data
                     </div>
                     <div class="row row-sm">
-                      <div class="col-lg-4 form-group">
+                      <div class="col-lg-3 form-group">
                         <p class="mg-b-10">Req. Completes <span class="text-danger">*</span></p>
                         <input type="number"  class="form-control" ng-model="formData.req_complete" placeholder="Req. Completes " type="text" required>
                       </div>
 
-                      <div class="col-lg-4 form-group">
+                      <div class="col-lg-3 form-group">
                         <p class="mg-b-10">IR <span class="text-danger">*</span></p>
                         <input type="number"  class="form-control" ng-model="formData.ir" placeholder="Input box" type="text" required>
                       </div>
 
-                      <div class="col-lg-4 form-group">
+                      <div class="col-lg-3 form-group">
                         <p class="mg-b-10">LOI <span class="text-danger">*</span></p>
                         <input type="number" class="form-control" ng-model="formData.loi" placeholder="loi" required>
+                      </div>
+
+                      <div class="col-lg-3 form-group">
+                        <p class="mg-b-10">Complete Total After Redirect </p>
+                        <input type="number" class="form-control" ng-model="formData.complete_total_after_redirect" placeholder="Complete Total After Redirect">
                       </div>
 
                       <div class="col-lg-4 mg-t-20 mg-lg-t-0">

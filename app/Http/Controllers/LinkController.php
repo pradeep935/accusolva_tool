@@ -348,6 +348,25 @@ class LinkController extends Controller
         
         
         $servay_info = StartSurveyInformation::find($project->id);
+
+        $flag = false;
+        if($projectData->complete_total_after_redirect){
+            $vendor_id = $servay_info->gid;
+
+            $original_vendor = DB::table('manage_suppliers')->select('vendor_id')->where('id',$vendor_id)->first();
+
+            $vendor = DB::table('vendors')->where('id',$original_vendor->vendor_id)->first();
+
+            $count = DB::table('start_survey_informations')->where('pid',$projectData->id)->where('gid',$vendor_id)->count();
+
+
+            if($count > $projectData->complete_total_after_redirect){
+                $flag = true;
+            }
+
+
+        }
+        
         
         
         if($request->status == 'complete'){
@@ -371,6 +390,26 @@ class LinkController extends Controller
         $servay_info->end_time = date("Y-m-d H:i:s");
         $servay_info->end_ip_address = $request->ip();    
         $servay_info->save(); 
+
+        if($flag){
+
+            if($status == 1){
+                return Redirect::to($vendor->after_total_complete_link);
+            }
+
+            if($status == 2){
+                return Redirect::to($vendor->after_total_disqualify_link);
+            }
+
+            if($status == 3){
+                return Redirect::to($vendor->after_total_qoutafull_link);
+            }
+
+            if($status == 4){
+                return Redirect::to($vendor->after_total_security_term_link);
+            }
+
+        }
         
         
         if($project->vendor_id == 1){

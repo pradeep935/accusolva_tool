@@ -85,6 +85,26 @@
            <p class="mg-b-10"> Security Term link <span class="text-danger">*</span></p>
            {{Form::textarea("securityTermlink",isset($vendor) ? $vendor->securityTermlink : '',["class"=>"form-control", "rows" => 3, "cols" => 3])}}
           </div>
+
+          <div class="col-lg-6 mt-3">
+           <p class="mg-b-10">After Total Complete Link <span class="text-danger">*</span></p>
+           {{Form::textarea("after_total_complete_link",isset($vendor) ? $vendor->after_total_complete_link : '',["class"=>"form-control", "rows" => 3, "cols" => 3])}}
+          </div>
+
+          <div class="col-lg-6 mt-3">
+           <p class="mg-b-10">After Total Disqualify Link <span class="text-danger">*</span></p>
+           {{Form::textarea("after_total_disqualify_link",isset($vendor) ? $vendor->after_total_disqualify_link : '',["class"=>"form-control", "rows" => 3, "cols" => 3])}}
+          </div>
+
+          <div class="col-lg-6 mt-3">
+           <p class="mg-b-10">After Total Qoutafull Link <span class="text-danger">*</span></p>
+           {{Form::textarea("after_total_qoutafull_link",isset($vendor) ? $vendor->after_total_qoutafull_link : '',["class"=>"form-control", "rows" => 3, "cols" => 3])}}
+          </div>
+
+          <div class="col-lg-6 mt-3">
+           <p class="mg-b-10">After Total Security Term link <span class="text-danger">*</span></p>
+           {{Form::textarea("after_total_security_term_link",isset($vendor) ? $vendor->after_total_security_term_link : '',["class"=>"form-control", "rows" => 3, "cols" => 3])}}
+          </div>
          </div>
         </div>
        </div>

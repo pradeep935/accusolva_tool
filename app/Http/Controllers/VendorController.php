@@ -69,6 +69,10 @@ class VendorController extends Controller
             $vendor->disqualifyLink = $request->disqualifyLink;
             $vendor->qoutafullLink = $request->qoutafullLink;
             $vendor->securityTermlink = $request->securityTermlink;
+            $vendor->after_total_complete_link = $request->after_total_complete_link;
+            $vendor->after_total_disqualify_link = $request->after_total_disqualify_link;
+            $vendor->after_total_qoutafull_link = $request->after_total_qoutafull_link;
+            $vendor->after_total_security_term_link = $request->after_total_security_term_link;
             $vendor->save();
 
             return Redirect::to('vendors')->with("message","Vendor was successfuly submitted");

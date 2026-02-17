@@ -437,6 +437,7 @@ class ProjectController extends Controller
             $project->notes = $request->notes;
             $project->project_brief = $request->project_brief;
             $project->status = $request->status;
+            $project->complete_total_after_redirect = $request->complete_total_after_redirect;
             $project->save();
 
             $data['success'] = true;
