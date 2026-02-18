@@ -1,18 +1,22 @@
 @extends('front-end.layout')
 @section('content')
 
-<!-- Loader Screen -->
-<div id="loaderScreen" style="
-    height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:linear-gradient(135deg,#667eea,#764ba2);
-    color:white;
-    font-size:20px;
-    font-weight:600;">
-    Verifying User...
-</div>
+@if(!request()->get('user_id'))
+
+    <!-- No User ID Screen -->
+    <div style="
+        height:100vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        background:linear-gradient(135deg,#667eea,#764ba2);
+        color:white;
+        font-size:22px;
+        font-weight:600;">
+        No User ID Found
+    </div>
+
+@else
 
 <style>
 body {
@@ -21,7 +25,7 @@ body {
 
 .survey-wrapper {
     min-height: 100vh;
-    display: none; /* hidden initially */
+    display: flex;
     align-items: center;
     justify-content: center;
     padding: 40px 15px;
@@ -35,14 +39,41 @@ body {
     width: 100%;
     max-width: 850px;
 }
+
+.alert-error {
+    background:#fff3f3;
+    border:1px solid red;
+    color:red;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:15px;
+}
 </style>
 
-<div class="survey-wrapper" id="surveyWrapper">
-    <div class="survey-card">
+<div class="survey-wrapper">
+    <div class="survey-card" id="surveyCard">
 
         <h3 class="text-center mb-4">
             <i class="fa fa-clipboard-list"></i> Start Survey
         </h3>
+
+        {{-- Validation Errors --}}
+        @if ($errors->any())
+            <div class="alert-error">
+                <ul style="margin:0;padding-left:18px;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        {{-- Session Message --}}
+        @if(Session::has('message'))
+            <div class="alert-error">
+                {{ Session::get('message') }}
+            </div>
+        @endif
 
         <form id="autoSubmitForm"
               action="{{ url('store-start-survey-information') }}"
@@ -92,42 +123,25 @@ body {
     </div>
 </div>
 
+{{-- Auto Submit if No Qualification --}}
+@if(sizeof($qualifications) == 0)
 <script>
 document.addEventListener("DOMContentLoaded", function() {
 
-    let userId = "{{ request()->get('user_id') }}";
+    // Hide survey while waiting
+    document.getElementById("surveyCard").style.display = "none";
 
-    if(!userId){
-        document.getElementById("loaderScreen").innerHTML = "No User ID Found";
-        return;
-    }
+    // Random delay between 5 and 10 seconds
+    let delay = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
 
-    fetch("{{ url('api/check-user') }}?user_id=" + userId)
-    .then(response => response.json())
-    .then(data => {
-
-        if(data.status === true){
-
-            document.getElementById("loaderScreen").style.display = "none";
-            document.getElementById("surveyWrapper").style.display = "flex";
-
-            @if(sizeof($qualifications) == 0)
-                let delay = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
-                setTimeout(function(){
-                    document.getElementById("autoSubmitForm").submit();
-                }, delay);
-            @endif
-
-        } else {
-            document.getElementById("loaderScreen").innerHTML = "Invalid User";
-        }
-
-    })
-    .catch(error => {
-        document.getElementById("loaderScreen").innerHTML = "API Error";
-    });
+    setTimeout(function(){
+        document.getElementById("autoSubmitForm").submit();
+    }, delay);
 
 });
 </script>
+@endif
+
+@endif
 
 @endsection
