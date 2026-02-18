@@ -92,7 +92,22 @@ class LinkController extends Controller
             $qualification->question->options = DB::table('options')->where('question_id',$qualification->question->id)->get();
         }
 
-        // dd($qualifications);
+        $alreadyExist = DB::table('start_survey_informations')
+            ->where('pid', $request->pid)
+            ->where('gid', $request->gid)
+            ->where('user_id', $request->user_id)
+            ->first();
+
+        if ($alreadyExist) {
+            return view('front-end.message', [
+                'message' => 'User id Already exist...',
+                "ip" => $request->ip(),
+                "pid" => $request->pid,
+                "uid" => $request->user_id
+            ]);
+        }
+
+        return $this->storeStartSurveyInformation($request);
 
         return view('admin.links.start_survay',["pid" => $request->pid, "gid" => $request->gid, "openQuestion" => $openQuestion, "qualifications" => $qualifications]);
 
