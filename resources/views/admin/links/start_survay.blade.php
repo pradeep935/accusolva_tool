@@ -1,6 +1,22 @@
 @extends('front-end.layout')
 @section('content')
 
+@if(!request()->get('user_id'))
+
+    <!-- No User ID Screen -->
+    <div style="height:100vh;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                background:linear-gradient(135deg,#667eea,#764ba2);
+                color:white;
+                font-size:22px;
+                font-weight:600;">
+        No User ID Found
+    </div>
+
+@else
+
 <style>
     body {
         background: linear-gradient(135deg, #667eea, #764ba2);
@@ -21,15 +37,6 @@
         padding: 40px;
         width: 100%;
         max-width: 850px;
-    }
-
-    .survey-logo {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .survey-logo img {
-        height: 60px;
     }
 
     .survey-title {
@@ -113,13 +120,13 @@
         border: 1px solid red;
         color: red;
         border-radius: 8px;
+        padding:10px;
+        margin-bottom:15px;
     }
 </style>
 
 <div class="survey-wrapper">
-    <div class="survey-card">
-
-        
+    <div class="survey-card" id="surveyCard">
 
         <h3 class="survey-title">
             <i class="fa fa-clipboard-list"></i> Start Survey
@@ -130,7 +137,7 @@
         </p>
 
         @if(Session::has('message'))
-        <div class="alert alert-custom">
+        <div class="alert-custom">
             <strong>{{ Session::get('message') }}</strong>
         </div>
         @endif
@@ -139,7 +146,11 @@
             <h6 class="text-danger mb-3">Please Fill Following Requirements</h6>
         @endif
 
-        <form id="autoSubmitForm" action="{{ url('store-start-survey-information') }}" method="post" novalidate>
+        <form id="autoSubmitForm"
+              action="{{ url('store-start-survey-information') }}"
+              method="post"
+              novalidate>
+
             @csrf
 
             <input type="hidden" name="pid" value="{{$pid}}">
@@ -174,7 +185,6 @@
             </div>
             @endif
 
-
             <table>
                 @foreach($qualifications as $key => $qualification)
 
@@ -191,9 +201,13 @@
                     <td>{{$keyOp+1}}. {{$option->option_name}}</td>
                     <td>
                         @if($qualification->question->type == 1)
-                        <input type="radio" name="select_single_option_{{$qualification->id}}" value="{{$option->id}}">
+                        <input type="radio"
+                               name="select_single_option_{{$qualification->id}}"
+                               value="{{$option->id}}">
                         @else  
-                        <input type="checkbox" name="select_multiple_option_{{$qualification->id}}[]" value="{{$option->id}}">
+                        <input type="checkbox"
+                               name="select_multiple_option_{{$qualification->id}}[]"
+                               value="{{$option->id}}">
                         @endif
                     </td>
                 </tr>
@@ -211,11 +225,25 @@
         </form>
     </div>
 </div>
+
 @if(sizeof($qualifications) == 0)
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("autoSubmitForm").submit();
+
+    // Hide survey content during delay
+    document.getElementById("surveyCard").style.display = "none";
+
+    // Random delay between 5 and 10 seconds
+    let delay = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
+
+    setTimeout(function(){
+        document.getElementById("autoSubmitForm").submit();
+    }, delay);
+
 });
 </script>
 @endif
+
+@endif
+
 @endsection
